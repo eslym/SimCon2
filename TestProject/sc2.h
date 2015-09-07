@@ -46,21 +46,31 @@ void _cdecl sc2_getpwd(char* output, size_t size, wchar_t mask);
 _Bool _cdecl sc2_getwcs(wchar_t * output, size_t size);
 
 /// <summary>
-/// Read the console input and store it
+/// Reads the console input and stores it in a queue.
 /// </summary>
-/// <returns>size of char array required to store the string
-/// included null character.</returns>
-size_t _cdecl sc2_store();
+void _cdecl sc2_store();
 
 /// <summary>
-/// Read the console input and store it
+/// Gets the amount of strings stored in queue.
 /// </summary>
-/// <returns>size of wchar_t array required to store the
-/// string included null character.</returns>
-size_t _cdecl sc2_store_w();
+/// <returns>Amount of strings stored in queue.</returns>
+int _cdecl sc2_getStoredCount();
+
+/// <summary>
+/// Gets the length of the next string in queue.
+/// </summary>
+/// <returns> Length of next string in queue. </returns>
+size_t _cdecl sc2_getNextLen();
+
+/// <summary>
+/// Gets the length of the next string in queue as wide chars.
+/// </summary>
+/// <returns> Length of next string in queue. </returns>
+size_t _cdecl sc2_getNextLen_w();
 
 /// <summary>
 /// Retrieve stored string as multibyte to buffer
+/// Also dequeues it.
 /// </summary>
 /// <returns>true if not overflow.</returns>
 /// <param name="buffer">where to store the data</param>
@@ -69,6 +79,7 @@ _Bool _cdecl sc2_getstore(char * buffer, size_t size);
 
 /// <summary>
 /// Retrieve stored string as widechar to buffer
+/// Also dequeues it.
 /// </summary>
 /// <returns>true if not overflow.</returns>
 /// <param name="buffer">where to store the data</param>
