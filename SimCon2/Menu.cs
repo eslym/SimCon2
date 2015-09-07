@@ -68,7 +68,7 @@ namespace SimCon2
                 }
                 else
                 {
-                    if (Menu.keyListener(index) == 1) break;
+                    if (Menu.keyListener != null && Menu.keyListener(index) == 1) break;
                 }
             }
             if (items[index].callback != null) return items[index].callback(index);
