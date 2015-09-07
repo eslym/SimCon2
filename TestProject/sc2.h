@@ -143,6 +143,12 @@ typedef int (_cdecl *sc2m_callback)(int index);
 void _cdecl sc2m_set_callback(sc2m_callback callback);
 
 /// <summary>
+/// Set the callback function which will be called on unhandled keypresses.
+/// </summary>
+/// <param="callback">the callback function, function returns 1 if the menu is to be updated</param>
+void _cdecl sc2m_set_keyListener(sc2m_callback callback);
+
+/// <summary>
 /// Show menu with a specific title
 /// </summary>
 /// <param="title">the title</param>

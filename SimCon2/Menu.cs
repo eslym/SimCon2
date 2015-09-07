@@ -13,14 +13,25 @@ namespace SimCon2
         public delegate int Callback(int param);
 
         public static Callback callback = null;
+        public static Callback keyListener = null;
         public static List<Item> items = new List<Item>();
 
         [DllExport("sc2m_set_callback", CallingConvention.Cdecl)]
         public static void SetCallback(IntPtr callback)
         {
             if (callback == IntPtr.Zero) Menu.callback = null;
-            else Menu.callback = (Callback)Marshal.GetDelegateForFunctionPointer(
-                callback, typeof(Callback));
+            else
+                Menu.callback = (Callback)Marshal.GetDelegateForFunctionPointer(
+               callback, typeof(Callback));
+        }
+
+        [DllExport("sc2m_set_keyListener", CallingConvention.Cdecl)]
+        public static void SetKeyListener(IntPtr callback)
+        {
+            if (callback == IntPtr.Zero) Menu.keyListener = null;
+            else
+                Menu.keyListener = (Callback)Marshal.GetDelegateForFunctionPointer(
+               callback, typeof(Callback));
         }
 
         [DllExport("sc2m_show", CallingConvention.Cdecl)]
@@ -54,6 +65,10 @@ namespace SimCon2
                     index -= 1;
                     if (index < 0) index = items.Count - 1;
                     Draw(title, index);
+                }
+                else
+                {
+                    if (Menu.keyListener(index) == 1) break;
                 }
             }
             if (items[index].callback != null) return items[index].callback(index);
