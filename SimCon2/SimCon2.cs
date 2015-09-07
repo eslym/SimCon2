@@ -9,7 +9,7 @@ namespace SimCon2
 {
     public class SimCon2
     {
-        public static string stored = "";
+        public static Queue<string> StoredStrings = new Queue<string>();
 
         [DllExport("sc2_encoding", CallingConvention.Cdecl)]
         public static bool SetEncoding(int cp) {
@@ -17,7 +17,7 @@ namespace SimCon2
                 MultiByte.Encoding = Encoding.GetEncoding(cp);
                 Console.InputEncoding = MultiByte.Encoding;
                 Console.OutputEncoding = MultiByte.Encoding;
-            } catch (Exception e) {
+            } catch (Exception) {
                 return false;
             }
             return true;
@@ -35,9 +35,8 @@ namespace SimCon2
             string pwd = "";
             int start = Console.CursorLeft;
             int index = 0;
-            ConsoleKeyInfo key;
             while (true) {
-                key = Console.ReadKey(true);
+                var key = Console.ReadKey(true);
                 if (key.Key == ConsoleKey.Enter) break;
                 if (index > 0 && key.Key == ConsoleKey.LeftArrow) {
                     index -= 1;
@@ -84,29 +83,39 @@ namespace SimCon2
         }
 
         [DllExport("sc2_store", CallingConvention.Cdecl)]
-        public static uint StoreStrA()
+        public static void StoreStr()
         {
-            stored = Console.ReadLine();
-            return (uint)MultiByte.Encoding.GetBytes(stored.ToCharArray()).Length + 1;
+            StoredStrings.Enqueue(Console.ReadLine());
         }
 
-        [DllExport("sc2_store_w", CallingConvention.Cdecl)]
-        public static uint StoreStrW()
+        [DllExport("sc2_getStoredCount", CallingConvention.Cdecl)]
+        public static int GetStoreLength()
         {
-            stored = Console.ReadLine();
-            return (uint)stored.Length + 1;
+            return StoredStrings.Count;
         }
 
-        [DllExport("sc2_getstore", CallingConvention.Cdecl)]
+        [DllExport("sc2_getNextLen", CallingConvention.Cdecl)]
+        public static uint GetNextLengthA()
+        {
+            return (uint)MultiByte.Encoding.GetBytes(StoredStrings.Peek().ToCharArray()).Length + 1;
+        }
+
+        [DllExport("sc2_getNextLen_w", CallingConvention.Cdecl)]
+        public static uint GetNextLengthW()
+        {
+            return (uint)StoredStrings.Peek().Length + 1;
+        }
+
+        [DllExport("sc2_getStore", CallingConvention.Cdecl)]
         public static bool GetStoreA(IntPtr output, uint size)
         {
-            return MultiByte.StringToPtr(stored, output, size);
+            return MultiByte.StringToPtr(StoredStrings.Dequeue(), output, size);
         }
 
-        [DllExport("sc2_getstore_w", CallingConvention.Cdecl)]
+        [DllExport("sc2_getStore_w", CallingConvention.Cdecl)]
         public static bool GetStoreW(IntPtr output, uint size)
         {
-            return WideChar.StringToPtr(stored, output, size);
+            return WideChar.StringToPtr(StoredStrings.Dequeue(), output, size);
         }
 
         [DllExport("sc2_getint", CallingConvention.Cdecl)]
@@ -120,16 +129,16 @@ namespace SimCon2
         }
 
         [DllExport("sc2_confirm", CallingConvention.Cdecl)]
-        public static bool Confirm(bool prompt) {
+        public static bool Confirm(bool prompt)
+        {
             if (prompt) Console.Write("(Y/N)?");
-            ConsoleKey key = Console.ReadKey(true).Key;
+            var key = Console.ReadKey(true).Key;
             while (key != ConsoleKey.Y && key != ConsoleKey.N) {
                 Console.Beep();
                 key = Console.ReadKey(true).Key;
             }
             if (prompt) {
-                if (key == ConsoleKey.Y) Console.Write("Yes");
-                else Console.Write("No");
+                Console.Write(key == ConsoleKey.Y ? "Yes" : "No");
             }
             Console.WriteLine();
             return key == ConsoleKey.Y;
