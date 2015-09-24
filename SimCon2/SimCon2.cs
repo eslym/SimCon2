@@ -128,6 +128,23 @@ namespace SimCon2
             return float.TryParse(Console.ReadLine(), out output);
         }
 
+        public static int Key2Int(ConsoleKeyInfo ki)
+        {
+            int modifiers = (int)ki.Modifiers;
+            byte[] mbytes = BitConverter.GetBytes(modifiers);
+            int key = (int)ki.Key;
+            byte[] kbytes = BitConverter.GetBytes(key);
+            mbytes[2] = kbytes[0];
+            mbytes[3] = kbytes[1];
+            return BitConverter.ToInt32(mbytes, 0);
+        }
+
+        [DllExport("sc2_getkey", CallingConvention.Cdecl)]
+        public static int GetKey(bool hide)
+        {
+            return Key2Int(Console.ReadKey(hide));
+        }
+
         [DllExport("sc2_confirm", CallingConvention.Cdecl)]
         public static bool Confirm(bool prompt)
         {

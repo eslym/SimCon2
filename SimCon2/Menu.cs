@@ -66,20 +66,8 @@ namespace SimCon2
                     if (index < 0) index = items.Count - 1;
                     Draw(title, index);
                 }
-                else
-                {
-                    if (Menu.keyListener != null)
-                    {
-                        int modifiers = (int)ki.Modifiers;
-                        byte[] mbytes = BitConverter.GetBytes(modifiers);
-                        int key = (int)ki.Key;
-                        byte[] kbytes = BitConverter.GetBytes(key);
-                        mbytes[2] = kbytes[0];
-                        mbytes[3] = kbytes[1];
-                        int s = BitConverter.ToInt32(mbytes, 0);
-                        if (Menu.keyListener(s) != 0) break;
-                    }
-                }
+                else if (Menu.keyListener != null &&
+                         Menu.keyListener(SimCon2.Key2Int(ki)) != 0) break;
             }
             if (items[index].callback != null) return items[index].callback(index);
             else if (Menu.callback != null) return Menu.callback(index);

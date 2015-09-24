@@ -12,11 +12,25 @@
 #pragma comment(lib, "..\\SimCon2\\bin\\Release\\sc2.lib")
 #endif
 
+#define SC2_MOD_ALT 1
+#define SC2_MOD_SHIFT 2
+#define SC2_MOD_CTRL 4
+
+struct sc2_key{
+	///<summary>Bitwise combination of modifiers</summary>
+	short modifiers;
+	///<summary>Key Code of the key</summary>
+	short keyCode;
+};
+
+///<summary>Struct to represent a key</summary>
+typedef struct sc2_key sc2_key;
+
 /// <summary>
 /// Set the code page using by SimCon2 and the console,
 /// default code page using is system default.
 /// </summary>
-/// <returns>true if success, false if the code page not
+/// <returns><c>true</c> if success, <c>false</c> if the code page not
 /// supported or invalid.</returns>
 /// <param name="CodePage">Code Page Identifier</param>
 _Bool _cdecl sc2_encoding(int CodePage);
@@ -24,7 +38,7 @@ _Bool _cdecl sc2_encoding(int CodePage);
 /// <summary>
 /// Get string input
 /// </summary>
-/// <returns>true if not overflow.</returns>
+/// <returns><c>true</c> if not overflow.</returns>
 /// <param name="output">where to store the data</param>
 /// <param name="size">size of array</param>
 _Bool _cdecl sc2_getstr(char * output, size_t size);
@@ -100,6 +114,12 @@ _Bool _cdecl sc2_getint(int * output);
 /// <param name="output">where to store the data</param>
 _Bool _cdecl sc2_getfloat(float * output);
 
+/// <summary>Get key pressed</summary>
+/// <returns>The key pressed</returns>
+/// <param name="hide"><c>true</c> to hide the key pressed
+/// from console</param>
+sc2_key _cdecl sc2_getkey(_Bool hide);
+
 /// <summary>
 /// Confirm from user.
 /// </summary>
@@ -119,30 +139,16 @@ void _cdecl sc2_title(char * title);
 void _cdecl sc2_clrscr();
 
 /// <summary>
-/// Pause the console
-/// </summary>
-void _cdecl sc2_pause();
-
-/// <summary>
 /// Beep sound!
 /// </summary>
 void _cdecl sc2_beep();
-
-#define SC2_MOD_ALT 1
-#define SC2_MOD_SHIFT 2
-#define SC2_MOD_CTRL 4
-
-typedef struct sc2_key{
-	short modifiers;
-	short keyCode;
-} sc2_key;
 
 /// <summary>
 /// Key Listener for SimCon2 Menu
 /// </summary>
 /// <returns>true to stop the menu</returns>
 /// <param name="key">key pressed</param>
-typedef bool (_cdecl *sc2m_ketListener)(sc2_key key);
+typedef _Bool (_cdecl *sc2m_keyListener)(sc2_key key);
 
 /// <summary>
 /// Callback function for SimCon2 Menu

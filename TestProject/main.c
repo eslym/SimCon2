@@ -29,12 +29,12 @@ void menu(){
 	case 1: case 2: case 3:
 		printf("This way was deprecated, please go North\n");
 		printf("\nPress any key to continue...");
-		sc2_pause();
+		sc2_getkey(1);
 		break;
 	case 4:
 		printf("Good Bye!\n");
 		printf("\nPress any key to continue...");
-		sc2_pause();
+		sc2_getkey(1);
 		scene = NULL;
 		break;
 	}
@@ -48,7 +48,7 @@ void menu_north(){
 	case 0:
 		printf("Good Bye!\n");
 		printf("\nPress any key to continue...");
-		sc2_pause();
+		sc2_getkey(1);
 		scene = NULL;
 		break;
 	case 1:
