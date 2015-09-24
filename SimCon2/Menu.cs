@@ -52,15 +52,15 @@ namespace SimCon2
             Draw(title, index);
             while (true)
             {
-                ConsoleKey key = Console.ReadKey(true).Key;
-                if (key == ConsoleKey.Enter || key == ConsoleKey.Spacebar) break;
-                if (key == ConsoleKey.DownArrow)
+                ConsoleKeyInfo ki = Console.ReadKey(true);
+                if (ki.Key == ConsoleKey.Enter || ki.Key == ConsoleKey.Spacebar) break;
+                if (ki.Key == ConsoleKey.DownArrow)
                 {
                     index += 1;
                     index %= items.Count;
                     Draw(title, index);
                 }
-                else if (key == ConsoleKey.UpArrow)
+                else if (ki.Key == ConsoleKey.UpArrow)
                 {
                     index -= 1;
                     if (index < 0) index = items.Count - 1;
@@ -68,7 +68,17 @@ namespace SimCon2
                 }
                 else
                 {
-                    if (Menu.keyListener != null && Menu.keyListener(index) == 1) break;
+                    if (Menu.keyListener != null)
+                    {
+                        int modifiers = (int)ki.Modifiers;
+                        byte[] mbytes = BitConverter.GetBytes(modifiers);
+                        int key = (int)ki.Key;
+                        byte[] kbytes = BitConverter.GetBytes(key);
+                        mbytes[2] = kbytes[0];
+                        mbytes[3] = kbytes[1];
+                        int s = BitConverter.ToInt32(mbytes, 0);
+                        if (Menu.keyListener(s) != 0) break;
+                    }
                 }
             }
             if (items[index].callback != null) return items[index].callback(index);
