@@ -13,7 +13,7 @@ namespace SimCon2
         public delegate int Callback(int param);
 
         public static Callback callback = null;
-        public static Callback keyListener = null;
+        public static List<Callback> keyHandlers = new List<Callback>();
         public static List<Item> items = new List<Item>();
 
         [DllExport("sc2m_set_callback", CallingConvention.Cdecl)]
@@ -25,13 +25,30 @@ namespace SimCon2
                callback, typeof(Callback));
         }
 
-        [DllExport("sc2m_set_keyListener", CallingConvention.Cdecl)]
-        public static void SetKeyListener(IntPtr callback)
+        [DllExport("sc2m_add_keyHandler", CallingConvention.Cdecl)]
+        public static int AddKeyHandler(int key, IntPtr handlerPtr)
         {
-            if (callback == IntPtr.Zero) Menu.keyListener = null;
-            else
-                Menu.keyListener = (Callback)Marshal.GetDelegateForFunctionPointer(
-               callback, typeof(Callback));
+            if (handlerPtr == IntPtr.Zero)
+                return -1;
+            Callback handler = (Callback)Marshal.GetDelegateForFunctionPointer(
+                handlerPtr, typeof(Callback));
+            if (!keyHandlers.Exists(x => x.Equals(handler)))
+                keyHandlers.Add(handler);
+            return keyHandlers.IndexOf(handler);
+        }
+
+        [DllExport("sc2m_remove_keyHandler", CallingConvention.Cdecl)]
+        public static int RemoveKeyHandler(int index)
+        {
+            try
+            {
+                keyHandlers.RemoveAt(index);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return 0;
+            }
+            return 1;
         }
 
         [DllExport("sc2m_show", CallingConvention.Cdecl)]
@@ -46,14 +63,38 @@ namespace SimCon2
             return Show(WideChar.StringFromPtr(ptitle));
         }
 
+        [DllExport("sc2m_show_idx", CallingConvention.Cdecl)]
+        public static int ShowA_Idx(IntPtr ptitle, int idx)
+        {
+            return Show(MultiByte.StringFromPtr(ptitle), idx);
+        }
+
+        [DllExport("sc2m_show_w_idx", CallingConvention.Cdecl)]
+        public static int ShowW_Idx(IntPtr ptitle, int idx)
+        {
+            return Show(WideChar.StringFromPtr(ptitle), idx);
+        }
+
         public static int Show(string title)
         {
-            int index = 0;
+            return Show(title, 0);
+        }
+
+        public static int Show(string title, int indexParam)
+        {
+            int index = indexParam;
             Draw(title, index);
             while (true)
             {
                 ConsoleKeyInfo ki = Console.ReadKey(true);
-                if (ki.Key == ConsoleKey.Enter || ki.Key == ConsoleKey.Spacebar) break;
+                int keyInt = SimCon2.Key2Int(ki);
+                if (ki.Key == ConsoleKey.Enter || ki.Key == ConsoleKey.Spacebar)
+                {
+                    if (items[index].callback != null)
+                        return items[index].callback(index);
+                    else if (Menu.callback != null)
+                        return Menu.callback(index);
+                }
                 if (ki.Key == ConsoleKey.DownArrow)
                 {
                     index += 1;
@@ -66,12 +107,14 @@ namespace SimCon2
                     if (index < 0) index = items.Count - 1;
                     Draw(title, index);
                 }
-                else if (Menu.keyListener != null &&
-                         Menu.keyListener(SimCon2.Key2Int(ki)) != 0) break;
+                else if (keyHandlers.ContainsKey(keyInt))
+                {
+                    if (keyHandlers[keyInt] != null)
+                    {
+                        return keyHandlers[keyInt](index);
+                    }
+                }
             }
-            if (items[index].callback != null) return items[index].callback(index);
-            else if (Menu.callback != null) return Menu.callback(index);
-            return index;
         }
 
         public static void Draw(string title, int index)

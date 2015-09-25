@@ -171,13 +171,15 @@ typedef int (_cdecl *sc2m_callback)(int index);
 void _cdecl sc2m_set_callback(sc2m_callback callback);
 
 /// <summary>
-/// Set the callback function which will be called on unhandled keypresses.
+/// Add a keyhandler function to handle keypresses.
 /// </summary>
-/// <param="callback">the callback function, function returns 1 if the menu is to be updated</param>
-void _cdecl sc2m_set_keyListener(sc2m_callback callback);
+/// <param="callback">the callback function, function returns nonzero if the menu is to be updated</param>
+void _cdecl sc2m_add_keyListener(sc2_key key, sc2m_keyListener keyListener);
 
 /// <summary>
 /// Show menu with a specific title
+/// Function returns return value from either callback
+/// or keyListener
 /// </summary>
 /// <param="title">the title</param>
 int _cdecl sc2m_show(char * title);
@@ -187,6 +189,20 @@ int _cdecl sc2m_show(char * title);
 /// </summary>
 /// <param="title">the title</param>
 int _cdecl sc2m_show_w(wchar_t * title);
+
+/// <summary>
+/// Show menu with a specific title
+/// </summary>
+/// <param="title">the title</param>
+/// <param="index">initial selection index</param>
+int _cdecl sc2m_show_idx(char * title, int index);
+
+/// <summary>
+/// Show menu with a specific title
+/// </summary>
+/// <param="title">the title</param>
+/// <param="index">initial selection index</param>
+int _cdecl sc2m_show_w_idx(wchar_t * title, int index);
 
 /// <summary>
 /// Add an item into menu
