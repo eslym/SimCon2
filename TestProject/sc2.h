@@ -12,19 +12,25 @@
 #pragma comment(lib, "..\\SimCon2\\bin\\Release\\sc2.lib")
 #endif
 
+#define true 1
+#define false 0
+
 struct sc2_key{
 	/// <summary>Boolean to represent ALT key</summary>
-	short ALT : 1;
+	unsigned short ALT : 1;
 	/// <summary>Boolean to represent SHIFT key</summary>
-	short SHIFT : 1;
+	unsigned short SHIFT : 1;
 	/// <summary>Boolean to represent ALT key</summary>
-	short CTRL : 1;
+	unsigned short CTRL : 1;
 	/// <summary>Key Code of the key</summary>
 	short keyCode;
 };
 
 /// <summary>Struct to represent a key</summary>
 typedef struct sc2_key sc2_key;
+
+/// <summary>Boolean type</summary>
+typedef _Bool bool;
 
 /// <summary>
 /// Set the code page using by SimCon2 and the console,
@@ -33,7 +39,7 @@ typedef struct sc2_key sc2_key;
 /// <returns><c>true</c> if success, <c>false</c> if the code page not
 /// supported or invalid.</returns>
 /// <param name="CodePage">Code Page Identifier</param>
-_Bool _cdecl sc2_encoding(int CodePage);
+bool _cdecl sc2_encoding(int CodePage);
 
 /// <summary>
 /// Get string input
@@ -41,7 +47,7 @@ _Bool _cdecl sc2_encoding(int CodePage);
 /// <returns><c>true</c> if not overflow.</returns>
 /// <param name="output">where to store the data</param>
 /// <param name="size">size of array</param>
-_Bool _cdecl sc2_getstr(char * output, size_t size);
+bool _cdecl sc2_getstr(char * output, size_t size);
 
 /// <summary>
 /// Get password input
@@ -57,7 +63,7 @@ void _cdecl sc2_getpwd(char* output, size_t size, wchar_t mask);
 /// <returns>true if not overflow.</returns>
 /// <param name="output">where to store the data</param>
 /// <param name="size">size of array</param>
-_Bool _cdecl sc2_getwcs(wchar_t * output, size_t size);
+bool _cdecl sc2_getwcs(wchar_t * output, size_t size);
 
 /// <summary>
 /// Reads the console input and stores it in a queue.
@@ -89,7 +95,7 @@ size_t _cdecl sc2_getNextLen_w();
 /// <returns>true if not overflow.</returns>
 /// <param name="buffer">where to store the data</param>
 /// <param name="size">size of array</param>
-_Bool _cdecl sc2_getstore(char * buffer, size_t size);
+bool _cdecl sc2_getstore(char * buffer, size_t size);
 
 /// <summary>
 /// Retrieve stored string as widechar to buffer
@@ -98,34 +104,34 @@ _Bool _cdecl sc2_getstore(char * buffer, size_t size);
 /// <returns>true if not overflow.</returns>
 /// <param name="buffer">where to store the data</param>
 /// <param name="size">size of array</param>
-_Bool _cdecl sc2_getstore_w(wchar_t * buffer, size_t size);
+bool _cdecl sc2_getstore_w(wchar_t * buffer, size_t size);
 
 /// <summary>
 /// Get integer input
 /// </summary>
 /// <returns>true if user input a valid value.</returns>
 /// <param name="output">where to store the data</param>
-_Bool _cdecl sc2_getint(int * output);
+bool _cdecl sc2_getint(int * output);
 
 /// <summary>
 /// Get float input
 /// </summary>
 /// <returns>true if user input a valid value.</returns>
 /// <param name="output">where to store the data</param>
-_Bool _cdecl sc2_getfloat(float * output);
+bool _cdecl sc2_getfloat(float * output);
 
 /// <summary>Get key pressed</summary>
 /// <returns>The key pressed</returns>
 /// <param name="hide"><c>true</c> to hide the key pressed
 /// from console</param>
-sc2_key _cdecl sc2_getkey(_Bool hide);
+sc2_key _cdecl sc2_getkey(bool hide);
 
 /// <summary>
 /// Confirm from user.
 /// </summary>
 /// <returns>true if yes</returns>
 /// <param name="prompt">true to prompt the "(Y/N)?" and answer.</param>
-_Bool _cdecl sc2_confirm(_Bool prompt);
+bool _cdecl sc2_confirm(bool prompt);
 
 /// <summary>
 /// Set the console title
@@ -148,7 +154,7 @@ void _cdecl sc2_beep();
 /// </summary>
 /// <returns>true to stop the menu</returns>
 /// <param name="key">key pressed</param>
-typedef _Bool (_cdecl *sc2m_keyListener)(sc2_key key);
+typedef bool (_cdecl *sc2m_keyListener)(sc2_key key);
 
 /// <summary>
 /// Callback function for SimCon2 Menu
