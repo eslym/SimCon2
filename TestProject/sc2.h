@@ -12,18 +12,18 @@
 #pragma comment(lib, "..\\SimCon2\\bin\\Release\\sc2.lib")
 #endif
 
-#define SC2_MOD_ALT 1
-#define SC2_MOD_SHIFT 2
-#define SC2_MOD_CTRL 4
-
 struct sc2_key{
-	///<summary>Bitwise combination of modifiers</summary>
-	short modifiers;
-	///<summary>Key Code of the key</summary>
+	/// <summary>Boolean to represent ALT key</summary>
+	short ALT : 1;
+	/// <summary>Boolean to represent SHIFT key</summary>
+	short SHIFT : 1;
+	/// <summary>Boolean to represent ALT key</summary>
+	short CTRL : 1;
+	/// <summary>Key Code of the key</summary>
 	short keyCode;
 };
 
-///<summary>Struct to represent a key</summary>
+/// <summary>Struct to represent a key</summary>
 typedef struct sc2_key sc2_key;
 
 /// <summary>
