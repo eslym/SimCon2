@@ -107,12 +107,11 @@ namespace SimCon2
                     if (index < 0) index = items.Count - 1;
                     Draw(title, index);
                 }
-                else if (keyHandlers.ContainsKey(keyInt))
+                foreach (Callback i in keyHandlers)
                 {
-                    if (keyHandlers[keyInt] != null)
-                    {
-                        return keyHandlers[keyInt](index);
-                    }
+                    int tmp = i(keyInt);
+                    if (tmp != 0)
+                        return tmp;
                 }
             }
         }
