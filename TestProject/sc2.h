@@ -126,6 +126,13 @@ bool _cdecl sc2_getfloat(float * output);
 /// from console</param>
 sc2_key _cdecl sc2_getkey(bool hide);
 
+/// <summary>Compare 2 sc2_key</summary>
+/// <returns><code>true</code> if both key have same
+/// modifiers and key code</returns>
+/// <param name="k1">Key to compare</param>
+/// <param name="k2">Key to compare</param>
+bool _cdecl sc2_keycmp(sc2_key k1, sc2_key k2);
+
 /// <summary>
 /// Confirm from user.
 /// </summary>

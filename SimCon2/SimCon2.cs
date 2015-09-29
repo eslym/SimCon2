@@ -145,6 +145,12 @@ namespace SimCon2
             return Key2Int(Console.ReadKey(hide));
         }
 
+        [DllExport("sc2_keycmp", CallingConvention.Cdecl)]
+        public static bool GetFloat(int k1, int k2)
+        {
+            return k1 == k2;
+        }
+
         [DllExport("sc2_confirm", CallingConvention.Cdecl)]
         public static bool Confirm(bool prompt)
         {
