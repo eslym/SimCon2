@@ -146,7 +146,7 @@ namespace SimCon2
         }
 
         [DllExport("sc2_keycmp", CallingConvention.Cdecl)]
-        public static bool GetFloat(int k1, int k2)
+        public static bool KeyCmp(int k1, int k2)
         {
             return k1 == k2;
         }
