@@ -161,7 +161,7 @@ void _cdecl sc2_beep();
 /// </summary>
 /// <returns>true to stop the menu</returns>
 /// <param name="key">key pressed</param>
-typedef bool (_cdecl *sc2m_keyListener)(sc2_key key);
+typedef int (_cdecl *sc2m_keyListener)(sc2_key key);
 
 /// <summary>
 /// Callback function for SimCon2 Menu
