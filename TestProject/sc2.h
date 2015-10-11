@@ -15,13 +15,20 @@
 #define true 1
 #define false 0
 
-struct sc2_key{
-	/// <summary>Boolean to represent ALT key</summary>
-	unsigned short ALT : 1;
-	/// <summary>Boolean to represent SHIFT key</summary>
-	unsigned short SHIFT : 1;
-	/// <summary>Boolean to represent ALT key</summary>
-	unsigned short CTRL : 1;
+#define sc2_newKey(ctrl, alt, shift, code) ((sc2_key){.modifiers.bits = {alt, shift, ctrl}, .keyCode = code})
+struct sc2_key {
+	union
+	{
+		short value;
+		struct {
+			/// <summary>Boolean to represent ALT key</summary>
+			unsigned short ALT : 1;
+			/// <summary>Boolean to represent SHIFT key</summary>
+			unsigned short SHIFT : 1;
+			/// <summary>Boolean to represent ALT key</summary>
+			unsigned short CTRL : 1;
+		} bits;
+	}modifiers;
 	/// <summary>Key Code of the key</summary>
 	short keyCode;
 };
