@@ -118,6 +118,29 @@ namespace SimCon2
             return WideChar.StringToPtr(StoredStrings.Dequeue(), output, size);
         }
 
+        [DllExport("sc2_getPstr", CallingConvention.Cdecl)]
+        public static IntPtr GetPtrStr()
+        {
+            string input = Console.ReadLine();
+            byte[] bytes = MultiByte.Encoding.GetBytes(input);
+            Array.Resize<byte>(ref bytes, bytes.Length + 1);
+            bytes[bytes.Length - 1] = 0;
+            IntPtr ptr = API.malloc((uint)bytes.Length);
+            if (ptr != IntPtr.Zero)
+                API.memmove(ptr, bytes, (uint)bytes.Length);
+            return ptr;
+        }
+
+        [DllExport("sc2_getPwcs", CallingConvention.Cdecl)]
+        public static IntPtr GetPtrWcs()
+        {
+            string input = Console.ReadLine();
+            IntPtr ptr = API.malloc(((uint)input.Length + 1) * 2);
+            if (ptr != IntPtr.Zero)
+                WideChar.StringToPtr(input, ptr, (uint)input.Length + 1);
+            return ptr;
+        }
+
         [DllExport("sc2_getint", CallingConvention.Cdecl)]
         public static bool GetInt32(out int output) {
             return Int32.TryParse(Console.ReadLine(), out output);

@@ -25,4 +25,7 @@ class API
 
     [DllImport("msvcrt.dll")]
     public static extern IntPtr memset(IntPtr ptr, int value, uint size);
+
+    [DllImport("msvcrt.dll")]
+    public static extern IntPtr malloc(uint size);
 }

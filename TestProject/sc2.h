@@ -17,8 +17,10 @@
 
 #define sc2_newKey(ctrl, alt, shift, code) ((sc2_key){.modifiers.bits = {alt, shift, ctrl}, .keyCode = code})
 struct sc2_key {
+	/// <summary>Union of Modifiers</summary>
 	union
 	{
+		/// <summary>Bitwise value of Modifiers</summary>
 		short value;
 		struct {
 			/// <summary>Boolean to represent ALT key</summary>
@@ -112,6 +114,22 @@ bool _cdecl sc2_getstore(char * buffer, size_t size);
 /// <param name="buffer">where to store the data</param>
 /// <param name="size">size of array</param>
 bool _cdecl sc2_getstore_w(wchar_t * buffer, size_t size);
+
+/// <summary>
+/// Get string and allocate memory to store it. Need to
+/// free it manually.
+/// </summary>
+/// <returns>The allocated memory, NULL when failed to
+/// allocate.</returns>
+char * _cdecl sc2_getPstr();
+
+/// <summary>
+/// Get widechar string and allocate memory to store it.
+/// Need to free it manually.
+/// </summary>
+/// <returns>The allocated memory, NULL when failed to
+/// allocate.</returns>
+char * _cdecl sc2_getPwcs();
 
 /// <summary>
 /// Get integer input
