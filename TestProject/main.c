@@ -18,9 +18,9 @@ int main(int argc, char * argv[]){
 void menu(){
 	sc2m_reset();
 	sc2m_add("Go to North", NULL, NULL);
-	sc2m_add("Go to South", NULL, NULL);
-	sc2m_add("Go to East", NULL, NULL);
-	sc2m_add("Go to West", NULL, NULL);
+	sc2m_add("Go to South", "This way is dead end.", NULL);
+	sc2m_add("Go to East", "This way is dead end.", NULL);
+	sc2m_add("Go to West", "This way is dead end.", NULL);
 	sc2m_add("Go Home", NULL, NULL);
 	switch (sc2m_show("Where are you going?")){
 	case 0:

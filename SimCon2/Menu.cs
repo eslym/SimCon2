@@ -1,9 +1,7 @@
 ﻿using CString;
-using RGiesecke.DllExport;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace SimCon2
 {
@@ -94,6 +92,7 @@ namespace SimCon2
                         return items[index].callback(index);
                     else if (Menu.callback != null)
                         return Menu.callback(index);
+                    else return index;
                 }
                 if (ki.Key == ConsoleKey.DownArrow)
                 {

@@ -7,9 +7,9 @@
 #define SIMCON2
 
 #ifdef _DEBUG
-#pragma comment(lib, "..\\SimCon2\\bin\\Debug\\sc2.lib")
+#pragma comment(lib, "..\\SimCon2\\bin\\x64\\Debug\\sc2.lib")
 #else
-#pragma comment(lib, "..\\SimCon2\\bin\\Release\\sc2.lib")
+#pragma comment(lib, "..\\SimCon2\\bin\\x64\\Release\\sc2.lib")
 #endif
 
 #define true 1
